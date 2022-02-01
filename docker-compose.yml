@@ -28,9 +28,7 @@ services:
               device_ids: ['2']
               capabilities: [gpu]
         limits:
-          cpus: '1'
-          memory: 1g
+          cpus: '8'
+          memory: 64g
     security_opt:
       - label:disable
-#    network_mode: "host"
-#    privileged: true
