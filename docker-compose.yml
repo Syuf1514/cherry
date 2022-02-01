@@ -3,13 +3,23 @@ version: "3.8"
 services:
   cherry:
     image: cherry
-    container_name: grigoryev_cherry
-    command: ["jupyter", "notebook", "--no-browser", "--ip", "0.0.0.0", "--port", "8000"]
+    container_name: ${USER}_cherry
+    user: docker
+    working_dir: /home/docker
+    command: [ "jupyter", "notebook", "--no-browser", "--ip", "0.0.0.0",
+               "--port", "8000", "--notebook-dir", "/notebooks" ]
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_ID: ${USER_ID:-0}
+        GROUP_ID: ${GROUP_ID:-0}
     ports:
       - "8000:8000"
-    network_mode: "host"
-    working_dir: /app
-#    volumes:
+    volumes:
+      - type: bind
+        source: $HOME/notebooks
+        target: /notebooks
     deploy:
       resources:
         reservations:
@@ -22,3 +32,5 @@ services:
           memory: 1g
     security_opt:
       - label:disable
+#    network_mode: "host"
+#    privileged: true
