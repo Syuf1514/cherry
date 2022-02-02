@@ -26,9 +26,6 @@ COPY requirements.txt /venvs/base/
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r /venvs/base/requirements.txt
 
-# Configure jupyter
-RUN python -m ipykernel install --name base --display-name "Python 3 (base)"
-
 # Configure user
 ARG USER_ID
 ARG GROUP_ID
@@ -37,3 +34,6 @@ RUN groupadd --gid $GROUP_ID docker && \
     adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID --shell /bin/bash docker && \
     adduser docker sudo && \
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Copy code
+COPY code /home/docker/code

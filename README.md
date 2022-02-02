@@ -1,22 +1,28 @@
 # cherry 🍒
-Basic docker project template for Deep Learning.
+Basic docker project template for Machine Learning.
 
 Supported: GPU (CUDA), pytorch, mount binds, volumes, host user, Jupyter.
 
 ### Requirements
-
 ```
 docker >= 19.03.13
 ```
 
 ### Usage
-Build and run container in shell mode (for administration), 
-some run options are ignored (see ``docker compose run --help``):
+I suggest using different servies for different tasks, for example
+`cherry_jupyter` for running jupyter server and `cherry_experiment`
+for conducting ML experiments. Here `<service>` is any of the services
+defined in `docker-compose.yml`.
+
+Build and run container in shell mode (for administration):
 ```
-docker compose build cherry
-docker compose run --rm cherry
+docker compose build <service>
+docker compose run <service> bash
 ```
-OR build and start container with all the specified options (exits when finished):
+OR build container, start it and exit once finished:
 ```
-docker compose up --build cherry
+docker compose up --build <service>
 ```
+
+### TODO
+* mount pip cache
