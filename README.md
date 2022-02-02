@@ -10,14 +10,14 @@ docker >= 19.03.13
 
 ### Usage
 I suggest using different servies for different tasks, for example
-`cherry_jupyter` for running jupyter server and `cherry_experiment`
+`cherry-jupyter` for running jupyter server and `cherry-experiment`
 for conducting ML experiments. Here `<service>` is any of the services
 defined in `docker-compose.yml`.
 
 Build and run container in shell mode (for administration):
 ```
 docker compose build <service>
-docker compose run <service> bash
+docker compose run --rm <service> bash
 ```
 OR build container, start it and exit once finished:
 ```

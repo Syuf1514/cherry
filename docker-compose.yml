@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  cherry_jupyter:
-    image: cherry_jupyter
-    container_name: $USER-cherry_jupyter
+  cherry-jupyter:
+    image: cherry-jupyter
+    container_name: $USER-cherry-jupyter
     user: docker
     working_dir: /home/docker
     command: [ "jupyter", "notebook", "--no-browser", "--ip", "0.0.0.0",
@@ -33,9 +33,9 @@ services:
     security_opt:
       - label:disable
 
-  cherry_experiment:
-    image: cherry_experiment
-    container_name: $USER-cherry_experiment
+  cherry-experiment:
+    image: cherry-experiment
+    container_name: $USER-cherry-experiment
     user: docker
     working_dir: /home/docker
     command: [ "python", "code/train.py" ]
