@@ -12,14 +12,17 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        USER_ID: ${USER_ID:-0}
-        GROUP_ID: ${GROUP_ID:-0}
+        USER_ID: $USER_ID
+        GROUP_ID: $GROUP_ID
     ports:
       - "8000:8000"
     volumes:
       - type: bind
         source: $HOME/notebooks
         target: /notebooks
+      - type: bind
+        source: $HOME/cherry/code
+        target: /home/docker/code
     deploy:
       resources:
         reservations:
@@ -32,19 +35,24 @@ services:
           memory: 64g
     security_opt:
       - label:disable
+    shm_size: 8g
 
-  cherry-experiment:
-    image: cherry-experiment
-    container_name: $USER-cherry-experiment
+  cherry:
+    image: cherry
+    container_name: $USER-cherry
     user: docker
-    working_dir: /home/docker
+    working_dir: /home/docker/cherry
     command: [ "python", "code/train.py" ]
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        USER_ID: ${USER_ID:-0}
-        GROUP_ID: ${GROUP_ID:-0}
+        USER_ID: $USER_ID
+        GROUP_ID: $GROUP_ID
+    volumes:
+      - type: bind
+        source: $HOME/cherry
+        target: /home/docker/cherry
     deploy:
       resources:
         reservations:
@@ -57,3 +65,4 @@ services:
           memory: 64g
     security_opt:
       - label:disable
+    shm_size: 8g
