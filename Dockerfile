@@ -1,5 +1,7 @@
 # syntax = docker/dockerfile:experimental
-FROM nvidia/cuda:11.1.1-cudnn8-devel-ubuntu20.04
+
+ARG CUDA_BASE
+FROM nvidia/cuda:$CUDA_BASE
 
 ARG PYTHON_VERSION=3.9
 ARG DEBIAN_FRONTEND=noninteractive
@@ -22,6 +24,7 @@ RUN python${PYTHON_VERSION} -m venv /venvs/base
 ENV PATH="/venvs/base/bin:${PATH}"
 
 # Install requirements
+ARG CUDA_TORCH
 COPY requirements.txt /venvs/base/
 RUN pip install --upgrade pip
 RUN --mount="type=cache,target=/root/.cache/pip" \
@@ -30,8 +33,10 @@ RUN --mount="type=cache,target=/root/.cache/pip" \
 # Configure user
 ARG USER_ID
 ARG GROUP_ID
-
 RUN groupadd --gid $GROUP_ID docker && \
     adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID --shell /bin/bash docker && \
     adduser docker sudo && \
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Copy code
+COPY . /home/docker

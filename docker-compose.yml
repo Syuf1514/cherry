@@ -14,6 +14,8 @@ services:
       args:
         USER_ID: $USER_ID
         GROUP_ID: $GROUP_ID
+        CUDA_BASE: $CUDA_BASE
+        CUDA_TORCH: $CUDA_TORCH
     ports:
       - "8000:8000"
     volumes:
@@ -28,7 +30,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ '2' ]
+              device_ids: [ '0' ]
               capabilities: [ gpu ]
         limits:
           cpus: '8'
@@ -41,7 +43,7 @@ services:
     image: cherry
     container_name: $USER-cherry
     user: docker
-    working_dir: /home/docker/cherry
+    working_dir: /home/docker
     command: [ "python", "code/train.py" ]
     build:
       context: .
@@ -49,16 +51,14 @@ services:
       args:
         USER_ID: $USER_ID
         GROUP_ID: $GROUP_ID
-    volumes:
-      - type: bind
-        source: $HOME/cherry
-        target: /home/docker/cherry
+        CUDA_BASE: $CUDA_BASE
+        CUDA_TORCH: $CUDA_TORCH
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ '2' ]
+              device_ids: [ '0' ]
               capabilities: [ gpu ]
         limits:
           cpus: '8'
