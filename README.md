@@ -14,7 +14,7 @@ Environmental variables:
 * `$USER_ID` and `$GROUP_ID`, equal to your user `id -u` and `id -g` respectively,
 * `$CUDA_BASE` tag of official nvidia/cuda base image from dockerhub fitting your CUDA driver (version not greater
 than that displayed by `nvidia-smi` on your machine, e.g. `11.3.1-cudnn8-devel-ubuntu20.04`),
-* `$CUDA_TORCH` torch cuda version, suffix in torch requirements (`cu102` or `cu113` or add your own),
+* `$CUDA_TORCH` torch cuda version, suffix in torch requirements (`cu102`, `cu111`, or `cu113`, or add your own),
 * `$PYTHON_VERSION` version of python you want to install and use, e.g. `3.9`.
 
 You may store these variables in `.env` file in your project root along with any secrets and tokens

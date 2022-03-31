@@ -17,7 +17,7 @@ services:
         CUDA_TORCH: $CUDA_TORCH
         PYTHON_VERSION: $PYTHON_VERSION
     ports:
-      - "8002:8000"
+      - "8000:8000"
     volumes:
       - type: bind
         source: $HOME/cherry/lib
@@ -27,11 +27,11 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ "4" ]
+              device_ids: [ "0" ]
               capabilities: [ gpu ]
         limits:
           memory: 64g
-    cpuset: "64-79"
+    cpuset: "0-15"
     security_opt:
       - label:disable
     shm_size: 8g
@@ -56,11 +56,11 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ "4" ]
+              device_ids: [ "0" ]
               capabilities: [ gpu ]
         limits:
           memory: 64g
-    cpuset: "64-79"
+    cpuset: "0-15"
     security_opt:
       - label:disable
     shm_size: 8g
