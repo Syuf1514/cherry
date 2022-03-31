@@ -1,9 +1,4 @@
-.git
-.idea
+*
 
-.dockerignore
-.env
-.gitignore
-docker-compose.yml
-Dockerfile
-README.md
+!lib
+!requirements-*.txt

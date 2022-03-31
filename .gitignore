@@ -1,2 +1,5 @@
-.idea
 .env
+.idea
+
+notebooks/*
+!notebooks/explore.ipynb

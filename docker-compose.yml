@@ -5,9 +5,8 @@ services:
     image: cherry-jupyter
     container_name: $USER-cherry-jupyter
     user: docker
-    working_dir: /home/docker
-    command: [ "jupyter", "notebook", "--no-browser", "--ip", "0.0.0.0",
-               "--port", "8000", "--notebook-dir", "/notebooks" ]
+    working_dir: /home/docker/cherry
+    command: [ "jupyter", "notebook", "--no-browser", "--ip", "0.0.0.0", "--port", "8000" ]
     build:
       context: .
       dockerfile: Dockerfile
@@ -16,25 +15,23 @@ services:
         GROUP_ID: $GROUP_ID
         CUDA_BASE: $CUDA_BASE
         CUDA_TORCH: $CUDA_TORCH
+        PYTHON_VERSION: $PYTHON_VERSION
     ports:
-      - "8000:8000"
+      - "8002:8000"
     volumes:
       - type: bind
-        source: $HOME/notebooks
-        target: /notebooks
-      - type: bind
-        source: $HOME/cherry/code
-        target: /home/docker/code
+        source: $HOME/cherry/lib
+        target: /home/docker/cherry/lib
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ '0' ]
+              device_ids: [ "4" ]
               capabilities: [ gpu ]
         limits:
-          cpus: '8'
           memory: 64g
+    cpuset: "64-79"
     security_opt:
       - label:disable
     shm_size: 8g
@@ -43,8 +40,8 @@ services:
     image: cherry
     container_name: $USER-cherry
     user: docker
-    working_dir: /home/docker
-    command: [ "python", "code/train.py" ]
+    working_dir: /home/docker/cherry
+    command: [ "python", "-m", "lib" ]
     build:
       context: .
       dockerfile: Dockerfile
@@ -53,16 +50,17 @@ services:
         GROUP_ID: $GROUP_ID
         CUDA_BASE: $CUDA_BASE
         CUDA_TORCH: $CUDA_TORCH
+        PYTHON_VERSION: $PYTHON_VERSION
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ '0' ]
+              device_ids: [ "4" ]
               capabilities: [ gpu ]
         limits:
-          cpus: '8'
           memory: 64g
+    cpuset: "64-79"
     security_opt:
       - label:disable
     shm_size: 8g

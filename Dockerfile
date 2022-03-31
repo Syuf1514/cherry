@@ -1,14 +1,14 @@
 # syntax = docker/dockerfile:experimental
 
+# Start from cuda image
 ARG CUDA_BASE
 FROM nvidia/cuda:$CUDA_BASE
 
-ARG PYTHON_VERSION=3.9
-ARG DEBIAN_FRONTEND=noninteractive
-
 # Install python
+ARG PYTHON_VERSION
+ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install --no-install-recommends -y software-properties-common && \
+    apt-get install --no-install-recommends -y software-properties-common unzip wget && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
     apt-get update && \
     apt-get install --no-install-recommends -y \
@@ -25,10 +25,11 @@ ENV PATH="/venvs/base/bin:${PATH}"
 
 # Install requirements
 ARG CUDA_TORCH
-COPY requirements.txt /venvs/base/
+COPY requirements-*.txt /venvs/base/
 RUN pip install --upgrade pip
 RUN --mount="type=cache,target=/root/.cache/pip" \
-    pip install -r /venvs/base/requirements.txt
+    pip install -r /venvs/base/requirements-torch_${CUDA_TORCH}.txt \
+                -r /venvs/base/requirements-common.txt
 
 # Configure user
 ARG USER_ID
@@ -38,5 +39,6 @@ RUN groupadd --gid $GROUP_ID docker && \
     adduser docker sudo && \
     echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Copy code
-COPY . /home/docker
+# Copy project files
+COPY --chown=$USER_ID:$GROUP_ID . /home/docker/cherry
+RUN rm /home/docker/cherry/requirements-*.txt

@@ -13,8 +13,9 @@ docker-compose >= 2.2.3
 Environmental variables:
 * `$USER_ID` and `$GROUP_ID`, equal to your user `id -u` and `id -g` respectively,
 * `$CUDA_BASE` tag of official nvidia/cuda base image from dockerhub fitting your CUDA driver (version not greater
-than that displayed by `nvidia-smi` on your machine, e.g. `11.1.1-cudnn8-devel-ubuntu20.04`),
-* `$CUDA_TORCH` torch installation suffix appropriate to your `$CUDA_BASE` version, e.g. `cu111`.
+than that displayed by `nvidia-smi` on your machine, e.g. `11.3.1-cudnn8-devel-ubuntu20.04`),
+* `$CUDA_TORCH` torch cuda version, suffix in torch requirements (`cu102` or `cu113` or add your own),
+* `$PYTHON_VERSION` version of python you want to install and use, e.g. `3.9`.
 
 You may store these variables in `.env` file in your project root along with any secrets and tokens
 that your project needs. Just make sure it is not tracked by git.
@@ -26,7 +27,7 @@ and `cherry` for conducting ML experiments. Here `<service>` is any of the servi
 Build and run container in shell mode (for administration):
 ```
 docker compose build <service>
-docker compose run --rm <service> bash
+docker compose run --rm --name <service-name> <service> bash
 ```
 OR build container, start it and exit once finished:
 ```
