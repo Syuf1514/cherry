@@ -1,46 +1,11 @@
 version: "3.8"
 
 services:
-  cherry-jupyter:
-    image: cherry-jupyter
-    container_name: $USER-cherry-jupyter
-    user: docker
-    working_dir: /home/docker/cherry
-    command: [ "jupyter", "notebook", "--no-browser", "--ip", "0.0.0.0", "--port", "8000" ]
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        USER_ID: $USER_ID
-        GROUP_ID: $GROUP_ID
-        CUDA_BASE: $CUDA_BASE
-        CUDA_TORCH: $CUDA_TORCH
-        PYTHON_VERSION: $PYTHON_VERSION
-    ports:
-      - "8000:8000"
-    volumes:
-      - type: bind
-        source: $HOME/cherry/lib
-        target: /home/docker/cherry/lib
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              device_ids: [ "0" ]
-              capabilities: [ gpu ]
-        limits:
-          memory: 64g
-    cpuset: "0-15"
-    security_opt:
-      - label:disable
-    shm_size: 8g
-
   cherry:
     image: cherry
     container_name: $USER-cherry
     user: docker
-    working_dir: /home/docker/cherry
+    working_dir: /cherry
     command: [ "python", "-m", "lib" ]
     build:
       context: .
@@ -48,19 +13,19 @@ services:
       args:
         USER_ID: $USER_ID
         GROUP_ID: $GROUP_ID
-        CUDA_BASE: $CUDA_BASE
-        CUDA_TORCH: $CUDA_TORCH
+        BASE_IMAGE: $BASE_IMAGE
+        TORCH_CUDA: $TORCH_CUDA
         PYTHON_VERSION: $PYTHON_VERSION
     deploy:
       resources:
         reservations:
           devices:
             - driver: nvidia
-              device_ids: [ "0" ]
+              device_ids: [ $DEVICE ]
               capabilities: [ gpu ]
         limits:
           memory: 64g
-    cpuset: "0-15"
+    cpuset: $CPUSET
     security_opt:
       - label:disable
     shm_size: 8g

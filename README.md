@@ -4,32 +4,25 @@ Basic docker project template for Machine Learning.
 Supported: GPU (CUDA), pytorch, mount binds, volumes, host user, Jupyter, pip cache mounting,
 CUDA version from environment, freezed code for experiments and live code for Jupyter.
 
-### Requirements
-```
-docker >= 19.03.13
-docker-compose >= 2.2.3
-```
+### Run with docker
 
-Environmental variables:
-* `$USER_ID` and `$GROUP_ID`, equal to your user `id -u` and `id -g` respectively,
-* `$CUDA_BASE` tag of official nvidia/cuda base image from dockerhub fitting your CUDA driver (version not greater
-than that displayed by `nvidia-smi` on your machine, e.g. `11.3.1-cudnn8-devel-ubuntu20.04`),
-* `$CUDA_TORCH` torch cuda version, suffix in torch requirements (`cu102`, `cu111`, or `cu113`, or add your own),
-* `$PYTHON_VERSION` version of python you want to install and use, e.g. `3.9`.
+Define environmental variables:
+* `USER_ID` and `GROUP_ID`, equal to your user `id -u` and `id -g` respectively;
+* `DEVICE` gpu you want to use (`0`);
+* `CPUSET` cpu range you want to use (`0-15`);
+* `BASE_IMAGE` tag of CUDA base image from docker hub fitting your CUDA driver (`11.3.1-cudnn8-devel-ubuntu20.04`);
+* `TORCH_CUDA` torch cuda version, suffix in torch requirements (`cu102`, `cu111`, `cu113`, or add your own);
+* `PYTHON_VERSION` version of python you want to install inside the container (`3.9`).
 
 You may store these variables in `.env` file in your project root along with any secrets and tokens
 that your project needs. Just make sure it is not tracked by git.
 
-### Usage
-I suggest using different services for different tasks, for example `cherry-jupyter` for running jupyter server
-and `cherry` for conducting ML experiments. Here `<service>` is any of the services  defined in `docker-compose.yml`.
+Dependencies can be configured in `docker-compose.yml`. Once done:
+```
+# to start jupyter server
+run/jupyter
 
-Build and run container in shell mode (for administration):
-```
-docker compose build <service>
-docker compose run --rm --name <service-name> <service> bash
-```
-OR build container, start it and exit once finished:
-```
-docker compose up --build <service>
+# to run an experiment
+docker compose build cherry
+docker compose run cherry
 ```
