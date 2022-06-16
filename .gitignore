@@ -5,3 +5,4 @@ notebooks/*
 !notebooks/explore.ipynb
 
 figures/*
+!figures/sample.png
