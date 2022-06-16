@@ -1,0 +1,9 @@
+ipywidgets
+jupyter
+matplotlib
+notebook
+numpy
+pandas
+pathlib
+scipy
+tqdm

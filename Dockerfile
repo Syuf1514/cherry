@@ -25,11 +25,11 @@ ENV PATH="/opt/base/bin:${PATH}"
 
 # Install requirements
 ARG TORCH_CUDA
-COPY requirements-*.txt /venvs/base/
+COPY requirements /opt/base/requirements
 RUN pip install --upgrade pip
 RUN --mount="type=cache,target=/root/.cache/pip" \
-    pip install -r /venvs/base/requirements-torch+${TORCH_CUDA}.txt \
-                -r /venvs/base/requirements-common.txt
+    pip install -r /opt/base/requirements/torch+${TORCH_CUDA}.txt \
+                -r /opt/base/requirements/common.txt
 
 # Configure user
 ARG USER_ID
@@ -41,4 +41,4 @@ RUN groupadd --gid $GROUP_ID docker && \
 
 # Copy project files
 COPY --chown=$USER_ID:$GROUP_ID . /cherry
-RUN rm /cherry/requirements-*.txt
+RUN rm -r /cherry/requirements

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -o allexport
+source .env
+set +o allexport
+
+docker compose build -q cherry
+docker run -dit --rm \
+  \
+  --name ${USER}_cherry_${1} \
+  --user docker \
+  --workdir /cherry \
+  \
+  --volume $(pwd)/figures:/cherry/figures \
+  \
+  --gpus device=$DEVICE \
+  --cpuset-cpus $CPUSET \
+  --memory 64g \
+  --shm-size 8g \
+  --security-opt label:disable \
+  \
+  --expose $JUPYTER_PORT \
+  --publish $JUPYTER_PORT:8000 \
+  --volume $(pwd)/configs:/cherry/configs \
+  --volume $(pwd)/lib:/cherry/lib \
+  \
+  cherry bash
+docker attach ${USER}_cherry_${1}

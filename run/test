@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker compose build -q cherry
+docker compose run --rm cherry

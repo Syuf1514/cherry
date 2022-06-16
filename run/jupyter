@@ -1,13 +1,16 @@
 #!/bin/bash
 
-PORT=8000
+set -o allexport
+source .env
+set +o allexport
 
 docker compose build -q cherry
 docker compose run --rm \
-  --name ${USER}-cherry-jupyter \
-  -p ${PORT}:80 \
-  -v ./lib:/cherry/icelib \
+  --name ${USER}_cherry_jupyter \
+  -p ${JUPYTER_PORT}:8000 \
+  -v ./lib:/cherry/lib \
+  -v ./configs:/cherry/configs \
   -d cherry \
-  jupyter notebook --no-browser --ip 0.0.0.0 --port 80
+  jupyter notebook --no-browser --ip 0.0.0.0 --port 8000
 sleep 1
-docker exec ${USER}-cherry-jupyter jupyter notebook list
+docker exec ${USER}_cherry_jupyter jupyter notebook list

@@ -3,7 +3,7 @@ version: "3.8"
 services:
   cherry:
     image: cherry
-    container_name: $USER-cherry
+    container_name: ${USER}_cherry
     user: docker
     working_dir: /cherry
     command: [ "python", "-m", "lib" ]
@@ -16,6 +16,11 @@ services:
         BASE_IMAGE: $BASE_IMAGE
         TORCH_CUDA: $TORCH_CUDA
         PYTHON_VERSION: $PYTHON_VERSION
+    environment: []
+    volumes:
+      - type: bind
+        source: ./figures
+        target: /cherry/figures
     deploy:
       resources:
         reservations:
@@ -26,6 +31,6 @@ services:
         limits:
           memory: 64g
     cpuset: $CPUSET
+    shm_size: 8g
     security_opt:
       - label:disable
-    shm_size: 8g
